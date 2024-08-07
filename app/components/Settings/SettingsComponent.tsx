@@ -178,7 +178,7 @@ const SettingsComponent: React.FC<SettingsComponentProps> = ({
             <SettingButton
               Icon={FaPaintBrush}
               iconSize={iconSize}
-              title="Customize Verba"
+              title="Customize"
               currentSetting={setting}
               setSetting={setSetting}
               setSettingString="Customization"
@@ -226,7 +226,7 @@ const SettingsComponent: React.FC<SettingsComponentProps> = ({
                         setSetting("Customization");
                       }}
                     >
-                      <a>Customize Verba</a>
+                      <a>Customize</a>
                     </li>
                     <li
                       onClick={() => {
@@ -270,7 +270,7 @@ const SettingsComponent: React.FC<SettingsComponentProps> = ({
               </div>
             </div>
           )}
-          <div className=" flex-coll gap-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex-coll gap-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {setting &&
               Object.entries(
                 BaseSettings[settingTemplate][setting].settings

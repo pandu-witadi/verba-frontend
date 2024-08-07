@@ -109,7 +109,7 @@ const BaseFonts: SelectSetting = {
 const BaseCustomization: CustomizationSettings = {
   title: "Customization",
   description:
-    "Customize the layout of your Verba by changing the title, subtitle, logo, and colors of the app.",
+    "Customize the layout by changing the title, subtitle, logo, and colors of the app.",
   settings: {
     title: { text: "Verba", type: "text", description: "Title of the Page" },
     subtitle: {

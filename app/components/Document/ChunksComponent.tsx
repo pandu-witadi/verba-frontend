@@ -52,47 +52,48 @@ const ChunksComponent: React.FC<ChunksComponentComponentProps> = ({
   return (
     <div className="flex flex-col gap-2">
       {/*Chunks*/}
-      <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-3 md:h-[17vh] lg:h-[65vh] overflow-auto">
+      <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-3 md:h-[300px] overflow-auto">
         <div className="flex md:flex-col gap-5">
-          <div className="flex md:flex-row lg:flex-col gap-2 justify-center md:justify-start items-center">
-            {RAGConfig && (
-              <div className="flex flex-row lg:flex-col gap-2 items-center lg:w-full">
-                <ComponentStatus
-                  disable={production}
-                  component_name={
-                    RAGConfig ? RAGConfig["Embedder"].selected : ""
-                  }
-                  Icon={FaDatabase}
-                  changeTo={"RAG"}
-                  changePage={setCurrentPage}
-                />
-                <ComponentStatus
-                  disable={production}
-                  component_name={
-                    RAGConfig ? RAGConfig["Retriever"].selected : ""
-                  }
-                  Icon={FaSearch}
-                  changeTo={"RAG"}
-                  changePage={setCurrentPage}
-                />
-              </div>
-            )}
-          </div>
+          {/*<div className="flex md:flex-row lg:flex-col gap-2 justify-center md:justify-start items-center">*/}
+          {/*  {RAGConfig && (*/}
+          {/*    <div className="flex flex-row lg:flex-col gap-2 items-center lg:w-full">*/}
+          {/*      <ComponentStatus*/}
+          {/*        disable={production}*/}
+          {/*        component_name={*/}
+          {/*          RAGConfig ? RAGConfig["Embedder"].selected : ""*/}
+          {/*        }*/}
+          {/*        Icon={FaDatabase}*/}
+          {/*        changeTo={"RAG"}*/}
+          {/*        changePage={setCurrentPage}*/}
+          {/*      />*/}
+          {/*      <ComponentStatus*/}
+          {/*        disable={production}*/}
+          {/*        component_name={*/}
+          {/*          RAGConfig ? RAGConfig["Retriever"].selected : ""*/}
+          {/*        }*/}
+          {/*        Icon={FaSearch}*/}
+          {/*        changeTo={"RAG"}*/}
+          {/*        changePage={setCurrentPage}*/}
+          {/*      />*/}
+          {/*    </div>*/}
+          {/*  )}*/}
+          {/*</div>*/}
           {chunks && chunks.length > 0 && (
-            <div className="sm:hidden md:flex items-center justify-center">
+            <div className="sm:hidden md:flex items-left justify-left">
               <p className="items-center justify-center text-text-alt-verba text-xs">
                 {chunks.length} chunks retrieved in {chunkTime} seconds.
               </p>
             </div>
           )}
         </div>
-        <div className="flex sm:flex-row lg:flex-col gap-2">
+        <div className="flex sm:flex-row gap-2 flex-wrap">
           {chunks &&
             chunks.map((chunk, index) => (
-              <button
+              <div
                 key={chunk.doc_name + index}
                 onClick={() => setSelectedChunk(chunk)}
-                className={`btn md:btn-base bg-button-verba hover:bg-button-hover-verba border-none lg:btn-lg sm:w-2/3 md:w-1/3 lg:w-full flex justify-start items-center gap-5 ${selectedChunk?.chunk_id === chunk.chunk_id && selectedChunk.doc_uuid === chunk.doc_uuid ? "bg-secondary-verba" : "bg-button-verba"} hover:button-hover-verba`}
+                style={{maxWidth: '200px'}}
+                className={`btn md:btn-base bg-button-verba hover:bg-button-hover-verba border-none flex justify-start items-center gap-5 ${selectedChunk?.chunk_id === chunk.chunk_id && selectedChunk.doc_uuid === chunk.doc_uuid ? "bg-secondary-verba" : "bg-button-verba"} hover:button-hover-verba`}
               >
                 <div
                   className="tooltip text-xs"
@@ -107,7 +108,7 @@ const ChunksComponent: React.FC<ChunksComponentComponentProps> = ({
                     />
                   </button>
                 </div>
-                <div className="flex flex-col items-start truncate sm:w-1/2">
+                <div className="flex flex-col items-start truncate" style={{maxWidth: '110px'}}>
                   <p className="text-xs lg:text-sm text-text-verba">
                     {chunk.doc_name}
                   </p>
@@ -115,12 +116,12 @@ const ChunksComponent: React.FC<ChunksComponentComponentProps> = ({
                     {chunk.doc_type}
                   </p>
                 </div>
-              </button>
+              </div>
             ))}
           {context !== "" && (
             <button
               onClick={openContextModal}
-              className="btn flex gap-2 w-full border-none bg-button-verba text-text-verba hover:bg-button-hover-verba"
+              className="btn flex gap-2 border-none bg-button-verba text-text-verba hover:bg-button-hover-verba"
             >
               <IoSparkles className="text-text-verba" />
               <p className="text-text-verba text-xs">See Context</p>

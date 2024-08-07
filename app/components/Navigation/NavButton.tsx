@@ -30,7 +30,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
     <button
       disabled={APIHost === null}
       key={title}
-      className={`btn md:btn-sm lg:btn-md ${hide ? "hidden" : "flex"} flex-grow items-center justify-center border-none hover:bg-button-hover-verba ${currentPage === setPage ? "bg-primary-verba text-text-verba" : "bg-button-verba text-text-alt-verba"}`}
+      className={`btn md:btn-sm lg:btn-sm ${hide ? "hidden" : "flex"} flex-grow items-center justify-center border-none hover:bg-button-hover-verba ${currentPage === setPage ? "bg-primary-verba text-text-verba" : "bg-button-verba text-text-alt-verba"}`}
       onClick={(e) => {
         setCurrentPage(setPage);
       }}

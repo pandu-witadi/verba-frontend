@@ -131,7 +131,7 @@ export default function Home() {
 
     return (
         <main
-            className={`min-h-screen p-5 bg-bg-verba text-text-verba ${fontClassName}`}
+            className={`min-h-screen pt-2 pl-5 pr-5 bg-bg-verba text-text-verba ${fontClassName}`}
             data-theme={ baseSetting ? baseSetting[settingTemplate].Customization.settings.theme : "light" }
         >
             {gtag !== "" && <GoogleAnalytics gaId={gtag} />}
@@ -217,18 +217,18 @@ export default function Home() {
             ) : (
                     <div className="flex items-center justify-center h-screen gap-2">
                         <PulseLoader loading={true} size={12} speedMultiplier={0.75} />
-                        <p>Loading Verba</p>
+                        <p>Loading app</p>
                     </div>
             )}
-            <footer className="footer footer-center p-4 mt-8 bg-bg-verba text-text-alt-verba">
+            <footer className="footer footer-center p-1 mt-0 bg-bg-verba text-text-alt-verba">
                 <aside>
                     <p>cerebro © 2024</p>
                 </aside>
             </footer>
-            <img
-                referrerPolicy="no-referrer-when-downgrade"
-                src="https://static.scarf.sh/a.png?x-pxid=ec666e70-aee5-4e87-bc62-0935afae63ac"
-            />
+            {/*<img*/}
+            {/*    referrerPolicy="no-referrer-when-downgrade"*/}
+            {/*    src="https://static.scarf.sh/a.png?x-pxid=ec666e70-aee5-4e87-bc62-0935afae63ac"*/}
+            {/*/>*/}
         </main>
     );
 }

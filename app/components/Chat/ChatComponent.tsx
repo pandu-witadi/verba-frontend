@@ -38,9 +38,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     const [selectedChunk, setSelectedChunk] = useState<DocumentChunk | null>(null)
 
     return (
-        <div className="flex sm:flex-col md:flex-row justify-between items-start md:gap-3 ">
-            {/* Chat Interface */}
-            <div className="sm:w-full md:w-1/2 lg:w-4/6 flex flex-col gap-2">
+        <div className="flex sm:flex-col md:flex-row justify-between items-start md:gap-3">
+            <div className="flex flex-col gap-2 sm:w-full md:w-1/2 mb-4" style={{height: `calc( 100vh - 120px )`}}>
                 <InfoComponent
                   settingConfig={settingConfig}
                   tooltip_text={chat_interface_info}
@@ -58,42 +57,40 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
                 />
             </div>
 
-            <div className="flex lg:flex-row sm:flex-col justify-between items-start sm:w-full md:w-1/2 lg:w-3/6 gap-3">
-                {/* Chunk Selection */}
-                <div className="sm:w-full lg:w-1/4 flex flex-col gap-2">
-                    <InfoComponent
-                        settingConfig={settingConfig}
-                        tooltip_text={chunk_interface_info}
-                        display_text="Relevant Context"
-                    />
-                    <ChunksComponent
-                        context={context}
-                        production={production}
-                        chunks={chunks}
-                        RAGConfig={RAGConfig}
-                        selectedChunk={selectedChunk}
-                        setSelectedChunk={setSelectedChunk}
-                        chunkTime={chunkTime}
-                        setCurrentPage={setCurrentPage}
-                    />
-                </div>
+            <div className="flex flex-col gap-2 sm:w-full md:w-1/2">
+                <InfoComponent
+                    settingConfig={settingConfig}
+                    tooltip_text={document_interface_info}
+                    display_text="Document Viewer"
+                />
+                <DocumentComponent
+                    production={production}
+                    setSelectedChunk={setSelectedChunk}
+                    selectedChunk={selectedChunk}
+                    APIhost={APIHost}
+                    settingConfig={settingConfig}
+                    deletable={false}
+                    selectedDocument={null}
+                />
 
-                {/* Document Viewer */}
-                <div className="sm:w-full lg:w-3/4 flex flex-col gap-2">
-                    <InfoComponent
-                        settingConfig={settingConfig}
-                        tooltip_text={document_interface_info}
-                        display_text="Document Viewer"
-                    />
-                    <DocumentComponent
-                        production={production}
-                        setSelectedChunk={setSelectedChunk}
-                        selectedChunk={selectedChunk}
-                        APIhost={APIHost}
-                        settingConfig={settingConfig}
-                        deletable={false}
-                        selectedDocument={null}
-                    />
+                <div>
+                    <div className="sm:w-full flex-col gap-2">
+                        <InfoComponent
+                            settingConfig={settingConfig}
+                            tooltip_text={chunk_interface_info}
+                            display_text="Relevant Context"
+                        />
+                        <ChunksComponent
+                            context={context}
+                            production={production}
+                            chunks={chunks}
+                            RAGConfig={RAGConfig}
+                            selectedChunk={selectedChunk}
+                            setSelectedChunk={setSelectedChunk}
+                            chunkTime={chunkTime}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

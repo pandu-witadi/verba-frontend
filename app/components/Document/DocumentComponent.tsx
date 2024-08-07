@@ -148,7 +148,7 @@ const DocumentComponent: React.FC<DocumentComponentProps> = ({
 
   if (currentDocument !== null && !isFetching) {
     return (
-      <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-5 sm:h-[53.5vh] lg:h-[65vh] overflow-auto">
+      <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-5 overflow-auto"  style={{height: `calc( 100vh - 500px )`}}>
         {/*Title*/}
         <div className="flex justify-between">
           <div className="flex flex-col">

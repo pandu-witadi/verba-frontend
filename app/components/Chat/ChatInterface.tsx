@@ -31,6 +31,10 @@ interface ChatInterfaceComponentProps {
     production: boolean;
 }
 
+interface AiModel {
+    name: string
+}
+
 const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
     APIHost,
     settingConfig,
@@ -42,7 +46,7 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
     RAGConfig,
 }) => {
 
-    const [llm_model, set_llm_model] = useState(undefined);
+    const [llm_model, set_llm_model] = useState<string|undefined>();
 
     // const options = [
     //     "HTML",
@@ -51,33 +55,33 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
     //     "React",
     //     "Redux",
     // ];
-    const onOptionChangeHandler = (event) => {
-        set_llm_model(event.target.value);
+    const onOptionChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newText = event.target.value;
+        set_llm_model(newText);
         console.log(
             "User Selected Value - ",
-            event.target.value
+            newText
         )
     }
 
-    const [options, setOptions] = useState([])
+    const [options, setOptions] = useState<string[]>([])
     useEffect(() => {
         async function fetchData() {
             // Fetch data
             const resp = await fetch("http://117.54.250.85:5140/api/tags")
             let data = await resp.json()
-            console.log(data)
-            const results = []
+            let results: string[] = ['Select model']
             // Store results in the results array
-            data['models'].forEach((value) => {
+            data['models'].forEach((value: AiModel) => {
                 results.push(value.name)
             });
 
             // Update the options state
-            setOptions([ ...results ])
+            setOptions(results)
         }
 
         // Trigger the fetch
-        fetchData()
+        fetchData().then(r => {})
     }, [])
 
 
@@ -395,7 +399,7 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
                         }
                     ]
                 }
-                socket.send( JSON.stringify(chat_json) )
+                socket?.send( JSON.stringify(chat_json) )
                 isFetching.current = false
             } else {
                 try {
@@ -430,7 +434,7 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
                                     }
                                 ]
                             }
-                            socket.send( JSON.stringify(chat_json) )
+                            socket?.send( JSON.stringify(chat_json) )
                             isFetching.current = false
 
                         } else {
@@ -456,7 +460,7 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
                                         }
                                     ]
                                 }
-                                socket.send( JSON.stringify(chat_json) )
+                                socket?.send( JSON.stringify(chat_json) )
                                 isFetching.current = false
                                 // setFetchingStatus("DONE")
 
@@ -539,14 +543,11 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
         )
     }
 
-
-
-
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 h-full" >
             {/*Chat Messages*/}
-            <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-2 md:p-5 text-text-verba gap-5 h-[55vh] overflow-auto">
-                <div className="flex gap-1 md:gap-2 items-center">
+            <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg text-text-verba gap-5 overflow-auto">
+                <div className="flex gap-1 md:gap-2 items-center bg-gray-300 pl-5 pt-2 pb-2">
                     {RAGConfig && (
                         <div className="flex gap-2 items-center">
                             <ComponentStatus
@@ -561,47 +562,35 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
                         </div>
                     )}
                     <div className="hidden sm:block md:h-[3vh] lg:h-[2vh] bg-text-alt-verba w-px mx-0 md:mx-1"></div>
-                    <StatusLabel
-                        status={
-                            APIHost !== null &&
-                            socket !== null &&
-                            socket.readyState === WebSocket.OPEN
-                        }
-                        true_text="Online"
-                        false_text="Connecting..."
-                    />
-                    <StatusLabel
-                        status={settingConfig.Chat.settings.caching.checked}
-                        true_text="Caching"
-                        false_text="No Caching"
-                    />
-                    <StatusLabel
-                        status={settingConfig.Chat.settings.suggestion.checked}
-                        true_text="Suggestions"
-                        false_text="No Suggestions"
-                    />
-                    <div>
-                        <input type="checkbox" id="checkbox" checked={isContext} onChange={checkContextHandler}/>
-                        <p>{isContext ? "use local context" : "no context"}</p>
+                    <div className="form-control mr-2 bg-bg-verba pl-2 pr-2 pt-1 pb-1 rounded-lg">
+                        <label className="label cursor-pointer">
+                            <input type="checkbox" id="checkbox" checked={isContext} onChange={checkContextHandler} className="checkbox checkbox-primary"/>
+                            <div className={'ml-2'}>{isContext ? "local context" : "no context"}</div>
+                        </label>
                     </div>
-                    <select onChange={onOptionChangeHandler}>
-                        <option>model</option>
-                        {options.map((option, index) => {
-                            return (
-                                <option key={index}>
-                                    {option}
-                                </option>
-                            );
-                        })}
-                    </select>
+                    <div className="flex items-center justify-center">
+                        <select
+                            onChange={onOptionChangeHandler}
+                            className="select bg-bg-verba"
+                        >
+                            {options.map((option, index) => {
+                                return (
+                                    <option key={index}>
+                                        {option}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
                 </div>
 
-                <div className="flex flex-col">
-                    {messages.map( (message, index) => (
-                        <div ref={index === messages.length - 1 ? lastMessageRef : null} key={index} className={`mb-4 ${message.role === "user" ? "text-right" : ""}`}>
-                             <ChatMessage
-                                 message={message}
-                                 handleCopyToBillboard={handleCopyToBillboard}
+                <div className="flex flex-col pl-5 pr-5 ">
+                    {messages.map((message, index) => (
+                        <div ref={index === messages.length - 1 ? lastMessageRef : null} key={index}
+                             className={`mb-4 ${message.role === "user" ? "text-right" : ""}`}>
+                            <ChatMessage
+                                message={message}
+                                handleCopyToBillboard={handleCopyToBillboard}
                                  settingConfig={settingConfig}
                              />
                          </div>
@@ -643,7 +632,7 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
             </div>
 
             {/*Chat Input*/}
-            <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-5 min-h-[9.3vh]">
+            <div className="flex flex-col bg-bg-alt-verba rounded-lg shadow-lg p-5 text-text-verba gap-5 min-h-[11vh]">
                 <form className="flex justify-between w-full items-center gap-3" onSubmit={handleSendMessage}>
                     <textarea id={"reset"} rows={1} cols={10}
                         onKeyDown={handleKeyDown}
@@ -689,6 +678,27 @@ const ChatInterfaceComponent: React.FC<ChatInterfaceComponentProps> = ({
                         </button>
                     </div>
                 </form>
+                <div className='flex gap-1 md:gap-2 items-center p-2 bg-bg-verba'>
+                    <StatusLabel
+                        status={
+                            APIHost !== null &&
+                            socket !== null &&
+                            socket.readyState === WebSocket.OPEN
+                        }
+                        true_text="Online"
+                        false_text="Connecting..."
+                    />
+                    <StatusLabel
+                        status={settingConfig.Chat.settings.caching.checked}
+                        true_text="Caching"
+                        false_text="No Caching"
+                    />
+                    <StatusLabel
+                        status={settingConfig.Chat.settings.suggestion.checked}
+                        true_text="Suggestions"
+                        false_text="No Suggestions"
+                    />
+                </div>
             </div>
 
             <div className="flex flex-col gap-2">
